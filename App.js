@@ -1,114 +1,91 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+// /* eslint-disable react-native/no-inline-styles */
+// import React from 'react';
+// import { Text, View } from 'react-native';
+
+// const YourApp = () => {
+//   return (
+//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+//       <Text>Try editing me! 🎉</Text>
+//     </View>
+//   );
+// };
+
+// export default YourApp;
 
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const App: () => React$Node = () => {
+import { View, Button, StyleSheet } from 'react-native';
+import { Navigation } from 'react-native-navigation';
+import Screen1 from './src/screens/Screen1';
+import Screen2 from './src/screens/Screen2';
+// Home screen declaration
+const HomeScreen = (props) => {
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
+    <View style={styles.root}>
+      <View style={styles.button}>
+        <Button
+          title="Search Filters"
+          color="#87CEFF"
+          onPress={() =>
+            Navigation.push(props.componentId, {
+              component: {
+                name: 'Screen1',
+                options: {
+                  topBar: {
+                    title: {
+                      text: 'Search Filters',
+                    },
+                  },
+                },
+              },
+            })
+          }
+        />
+      </View>
+    </View>
   );
 };
+HomeScreen.options = {
+  topBar: {
+    title: {
+      text: 'Home',
+      color: 'white',
+    },
+    background: {
+      color: '#00008B',
+    },
+  },
+};
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+Navigation.registerComponent('Home', () => HomeScreen);
+Navigation.registerComponent('Screen1', () => Screen1);
+Navigation.registerComponent('Screen2', () => Screen2);
+Navigation.events().registerAppLaunchedListener(async () => {
+  Navigation.setRoot({
+    root: {
+      stack: {
+        id: 'MyStack',
+        children: [
+          {
+            component: {
+              name: 'Home',
+            },
+          },
+        ],
+      },
+    },
+  });
 });
 
-export default App;
+const styles = StyleSheet.create({
+  root: {
+    position: 'absolute',
+    flex: 1,
+    backgroundColor: 'whitesmoke',
+    padding: 20,
+  },
+  button: {
+    marginBottom: 20,
+    width: 250,
+    marginLeft: 60,
+  },
+});
